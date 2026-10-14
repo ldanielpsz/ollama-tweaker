@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ollama Tweaker</title>
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<h1>Ollama Tweaker <span class="pill" id="resolved"></span></h1>
+<main>
+  <section>
+    <label id="lbl_base">Model (installed)</label>
+    <select id="base"><option value="">loading…</option></select>
+    <div class="row2">
+      <div><label id="lbl_quant">Quantization</label><select id="quant"></select></div>
+      <div><label id="lbl_preset">Preset</label><select id="preset"></select></div>
+    </div>
+    <label id="lbl_override">Or type a tag to use / pull (overrides the dropdown)</label>
+    <input id="override" placeholder="e.g. llama3.2:3b-instruct-q4_0">
+    <button id="pull" class="sec">Pull resolved model</button>
+    <div class="hint" id="pullstat"></div>
+
+    <h2 class="panel-title">Request parameters</h2>
+    <div id="request-params"></div>
+
+    <h2 class="panel-title">Server settings <small>(applying restarts Ollama)</small></h2>
+    <div id="server-params"></div>
+    <button id="kvapply" class="sec">Apply &amp; restart Ollama</button>
+    <div class="hint" id="kvstat"></div>
+    <div class="hint" id="ps"></div>
+  </section>
+
+  <section>
+    <label id="lbl_system">System prompt (optional)</label>
+    <textarea id="system" style="min-height:50px" placeholder="e.g. You are a concise coding assistant."></textarea>
+    <div class="bar attachbar">
+      <button class="sec" data-attach="system">Attach file…</button>
+      <button class="sec" data-clear="system">Clear</button>
+      <span class="hint" id="system_info"></span>
+    </div>
+    <label>Prompt</label>
+    <textarea id="prompt">Explain KV cache quantization in two sentences.</textarea>
+    <div class="bar attachbar">
+      <button class="sec" data-attach="prompt">Attach file…</button>
+      <button class="sec" data-clear="prompt">Clear</button>
+      <span class="hint" id="prompt_info"></span>
+    </div>
+    <input type="file" id="filepick" multiple hidden>
+    <div class="row2"><button id="go">Generate</button><button id="stop" class="sec" disabled>Stop</button></div>
+    <pre id="out"></pre>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section class="wide">
+    <div class="bar">
+      <h2>Runs &amp; metrics</h2>
+      <select id="metric">
+        <option value="gen">Timeline: generation tok/s</option>
+        <option value="vram">Timeline: VRAM (GB)</option>
+      </select>
+      <button class="sec" id="selall">Select all</button>
+      <button class="sec" id="selnone">Clear</button>
+      <button class="sec" id="export">Export JSON</button>
+      <button class="sec" id="delall">Delete all</button>
+    </div>
+    <svg id="chart"></svg>
+    <div class="legend" id="legend"></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr>
+          <th></th><th>Time</th><th>Model</th><th>Preset</th><th>KV</th>
+          <th>Gen avg</th><th>Gen min</th><th>Gen max</th><th>Prompt tok/s</th>
+          <th>TTFT ms</th><th>VRAM min</th><th>VRAM avg</th><th>VRAM max</th><th>RAM GB</th><th>GPU %</th><th>Tokens</th><th></th>
+        </tr></thead>
+        <tbody id="runs"></tbody>
+      </table>
+    </div>
+    <div class="hint">Gen min/max are over 0.5 s windows. Ollama reports prompt processing as a single aggregate per run,
+      so its min/max appear in the aggregate row across selected runs. VRAM is sampled from <code>/api/ps</code> every 0.5 s.</div>
+    <div class="hint" id="agg"></div>
+    <div class="bar" style="margin-top:8px"><h2 id="runlogstitle"></h2></div>
+    <pre id="runlogs"></pre>
+  </section>
+
+  <section class="wide">
+    <div class="bar">
+      <h2>Ollama logs</h2>
+      <input type="text" id="logfilter" placeholder="filter…">
+      <button class="sec" id="logfollow">Pause</button>
+      <button class="sec" id="logclear">Clear</button>
+    </div>
+    <pre id="logs"></pre>
+  </section>
+</main>
+<script type="module" src="/js/main.js"></script>
+</body>
+</html>

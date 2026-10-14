@@ -1,0 +1,44 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: tweaker-ollama   # tweaker reads this container's logs by name
+    volumes:
+      - ollama_models:/root/.ollama   # shared with the other ollama stack (external volume)
+      - /home/ubuntu/models:/models:ro   # local GGUF files, importable with `ollama create`
+    environment:
+      # Server-level KV cache settings (f16 | q8_0 | q4_0). Requires flash attention.
+      OLLAMA_FLASH_ATTENTION: "1"
+      OLLAMA_KV_CACHE_TYPE: "q8_0"
+      # Verbose runner logs in the log panel
+      OLLAMA_DEBUG: "1"
+    # GPU (NVIDIA): uncomment
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  tweaker:
+    build: .
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_CONTAINER: tweaker-ollama
+      DATA_DIR: /data
+    ports:
+      - "8080:8080"
+    volumes:
+      - tweaker-data:/data
+      # Needed only for the log panel. Grants root-equivalent control of the host's Docker.
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+volumes:
+  ollama_models:
+    external: true
+    name: ollama_data   # existing volume used by the standalone `ollama` container
+  tweaker-data:
