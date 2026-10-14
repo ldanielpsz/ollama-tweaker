@@ -92,12 +92,14 @@ class ServerSettingsService {
       await this.docker.request('POST', `/containers/${enc(tmpName)}/stop?t=15`);
       r = await this.docker.request('POST', `/containers/${newId}/start`);
       if (r.status >= 300) throw new Error('start failed: ' + (r.json?.message || r.text));
+      const attempts = this.config.readyAttempts ?? 60;
+      const pollMs = this.config.readyPollMs ?? 1000;
       let up = false;
-      for (let i = 0; i < 60 && !up; i++) {
+      for (let i = 0; i < attempts && !up; i++) {
         up = await this.ollama.isUp();
-        if (!up) await sleep(1000);
+        if (!up) await sleep(pollMs);
       }
-      if (!up) throw new Error('ollama did not become ready within 60s');
+      if (!up) throw new Error(`ollama did not become ready within ${Math.round((attempts * pollMs) / 1000)}s`);
     } catch (e) {
       await rollback(newId);
       throw new Error(e.message + ' (rolled back to the previous container)');

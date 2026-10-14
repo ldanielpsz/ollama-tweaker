@@ -10,6 +10,8 @@ function loadConfig(env = process.env) {
     dataDir: env.DATA_DIR || path.join(root, 'data'),
     publicDir: path.join(root, 'public'),
     bucketMs: 500, // timeline resolution for generation tok/s and VRAM sampling
+    readyAttempts: 60, // how long to wait for Ollama after recreating its container
+    readyPollMs: 1000,
   };
 }
 

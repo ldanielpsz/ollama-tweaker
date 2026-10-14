@@ -1,0 +1,10 @@
+{
+  "name": "ollama-tweaker",
+  "private": true,
+  "description": "Quantization / KV-cache / offload wrapper UI for Ollama",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": { "node": ">=20" }
+}
