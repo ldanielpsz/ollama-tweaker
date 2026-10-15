@@ -1,4 +1,9 @@
-FROM /models/Qwen3-Coder-30B-A3B/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf
+# Example: import a local GGUF into Ollama's store (the models directory is mounted read-only at /models).
+#   docker cp Modelfile.example <ollama-container>:/tmp/Modelfile
+#   docker exec <ollama-container> ollama create my-model:q4_k_m -f /tmp/Modelfile
+FROM /models/<directory>/<model-file>.gguf
+
+# Minimal ChatML-style template; replace it with the one your model expects.
 TEMPLATE """{{- if .System }}<|im_start|>system
 {{ .System }}<|im_end|>
 {{ end }}<|im_start|>user
@@ -7,5 +12,3 @@ TEMPLATE """{{- if .System }}<|im_start|>system
 """
 PARAMETER stop "<|im_start|>"
 PARAMETER stop "<|im_end|>"
-PARAMETER temperature 0.7
-PARAMETER top_p 0.8

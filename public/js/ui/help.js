@@ -39,7 +39,7 @@ export const STATIC_HELP = {
     impact: 'Presets with smaller num_ctx use less KV-cache VRAM.',
   },
   lbl_override: {
-    title: 'Tag override / pull', what: 'Type any Ollama tag, e.g. llama3.2:3b-instruct-q4_0. It replaces the dropdown and is what “Pull” downloads.',
+    title: 'Tag override / pull', what: 'Type any Ollama tag, e.g. name:7b-instruct-q4_K_M. It replaces the dropdown and is what “Pull” downloads.',
   },
   lbl_system: {
     title: 'System prompt (supports attach / drag-drop)', what: 'Instruction placed before the prompt, in the model’s system role.',

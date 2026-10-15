@@ -1,6 +1,8 @@
 {
   "name": "ollama-tweaker",
   "private": true,
+  "license": "MIT",
+  "author": "Luis Ponce",
   "description": "Quantization / KV-cache / offload wrapper UI for Ollama",
   "scripts": {
     "start": "node server.js",

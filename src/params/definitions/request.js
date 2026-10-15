@@ -115,7 +115,7 @@ const hardware = {
     { key: 'num_gpu', label: 'num_gpu (layers on GPU)', type: 'int', min: -1, placeholder: 'auto',
       help: help('num_gpu — layers on GPU (RAM offload)', 'How many transformer layers run on the GPU. The remaining layers stay in system RAM and run on the CPU. Empty = Ollama decides from free VRAM.',
         ['empty / -1: auto, fit as many as VRAM allows.', '0: CPU only, no VRAM used.', 'N (e.g. 20): exactly N layers on GPU; lower N frees VRAM for a bigger num_ctx / KV cache.', 'Too high: load error or out-of-memory.'],
-        'Each layer moved to RAM saves about model size ÷ layer count of VRAM but slows generation, since RAM + CPU are far slower than VRAM + GPU. MoE models (e.g. A3B) suffer less because only a few experts compute per token. Needs enough free system RAM.') },
+        'Each layer moved to RAM saves about model size ÷ layer count of VRAM but slows generation, since RAM + CPU are far slower than VRAM + GPU. Mixture-of-experts (MoE) models suffer less because only a few experts compute per token. Needs enough free system RAM.') },
     { key: 'num_thread', label: 'num_thread (CPU)', type: 'int', min: 0, placeholder: 'auto',
       help: help('num_thread — CPU threads', 'Threads used for the layers running on CPU. Empty = auto (physical cores).',
         ['Physical core count: usually best.', 'More than physical cores (hyperthreads): often slower.'],

@@ -45,10 +45,10 @@ const done = { done: true, eval_count: 2, eval_duration: 1e9, prompt_eval_count:
 test('buildPayload: preset options, request params and system prompt are merged', () => {
   const { svc } = setup();
   const p = svc.buildPayload({
-    model: 'qwen:q4', prompt: 'hi', system: 'be terse', preset: 'memory_optimized',
+    model: 'model-a:q4', prompt: 'hi', system: 'be terse', preset: 'memory_optimized',
     params: { num_ctx: '2048', top_k: '20', stop: '###, END', use_mmap: 'false', mirostat: '2', temperature: '' },
   });
-  assert.equal(p.model, 'qwen:q4');
+  assert.equal(p.model, 'model-a:q4');
   assert.equal(p.stream, true);
   assert.equal(p.system, 'be terse');
   assert.deepEqual(p.options, {
@@ -75,8 +75,8 @@ test('buildPayload: empty params change nothing and text format is omitted', () 
 
 test('buildPayload: model can be composed from base + quant', () => {
   const { svc } = setup();
-  assert.equal(svc.buildPayload({ base: 'llama3', quant: 'q4_0', prompt: 'p' }).model, 'llama3:q4_0');
-  assert.equal(svc.buildPayload({ base: 'llama3', prompt: 'p' }).model, 'llama3');
+  assert.equal(svc.buildPayload({ base: 'model-a', quant: 'q4_0', prompt: 'p' }).model, 'model-a:q4_0');
+  assert.equal(svc.buildPayload({ base: 'model-a', prompt: 'p' }).model, 'model-a');
 });
 
 test('buildPayload: validation failures are 400s', () => {
